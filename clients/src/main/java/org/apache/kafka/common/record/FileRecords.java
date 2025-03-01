@@ -266,6 +266,7 @@ public class FileRecords extends AbstractRecords implements Closeable {
         if (targetSize > originalSize || targetSize < 0)
             throw new KafkaException("Attempt to truncate log segment " + file + " to " + targetSize + " bytes failed, " +
                     " size of this log segment is " + originalSize + " bytes.");
+        //看注释，因为有些版本中的jdk版本，如果targetSize等于sizeInBytes，再调用truncate，会导致文件mtime更新，但是文件并无变化
         if (targetSize < (int) channel.size()) {
             channel.truncate(targetSize);
             size.set(targetSize);
